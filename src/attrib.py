@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from datetime import date
 
 
 class Szoba(ABC):
@@ -30,45 +29,7 @@ class KetagyasSzoba(Szoba):
         return f"Kétágyas szoba #{self.szobaszam} - Ár: {self.ar} Ft, Kilátás: {self.kilatas}"
 
 
-class Szalloda:
-    def __init__(self, nev):
-        self.nev = nev
-        self.szobak = []
-
-    def add_szoba(self, szoba):
-        self.szobak.append(szoba)
-
-    def get_szobak_info(self):
-        szobak_info = [szoba.info() for szoba in self.szobak]
-        return "\n".join(szobak_info)
-
-
-class Foglalas:
-    def __init__(self, szoba, datum):
-        self.szoba = szoba
-        self.datum = datum
-
-    def info(self):
-        return f"Foglalás a(z) {self.szoba.info()} szobára a következő napra: {self.datum}"
-
-
-class Szalloda:
-    def __init__(self, nev):
-        self.nev = nev
-        self.szobak = []
-
-    def add_szoba(self, szoba):
-        self.szobak.append(szoba)
-
-    def get_szobak_info(self):
-        szobak_info = [szoba.info() for szoba in self.szobak]
-        return "\n".join(szobak_info)
-
-    def foglalas(self, szobaszam, datum):
-        for szoba in self.szobak:
-            if szoba.szobaszam == szobaszam:
-                foglalas = Foglalas(szoba, datum)
-                return foglalas
+from datetime import date
 
 
 class Foglalas:
@@ -80,7 +41,7 @@ class Foglalas:
         return f"Foglalás a {self.szoba.info()} számú szobára a következő napra: {self.datum}"
 
 
-class Lemondas:
+class Szalloda:
     def __init__(self, nev):
         self.nev = nev
         self.szobak = []
@@ -106,3 +67,23 @@ class Lemondas:
             return f"Foglalás lemondva: {foglalas.info()}"
         else:
             return "A megadott foglalás nem található."
+
+    def listaz_foglalasok(self):
+        foglalasok_info = [foglalas.info() for foglalas in self.foglalasok]
+        return "\n".join(foglalasok_info)
+
+
+# Példa használatra:
+szalloda = Szalloda("Luxus Hotel")
+
+egyagyas_szoba = EgyagyasSzoba(5000, 101, "Magas")
+ketagyas_szoba = KetagyasSzoba(8000, 201, "Tengerre néző")
+
+szalloda.add_szoba(egyagyas_szoba)
+szalloda.add_szoba(ketagyas_szoba)
+
+foglalas_egyagyas = szalloda.foglalas(101, date(2023, 12, 1))
+foglalas_ketagyas = szalloda.foglalas(201, date(2023, 12, 1))
+
+print("Foglalások:")
+print(szalloda.listaz_foglalasok())
